@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat App</title>
+  <link rel="stylesheet" type="text/css" href="style.css"> <!-- Include the CSS file -->
+</head>
+<body>
+  <div id="chat-container">
+    <div class="header">Chat with Students</div>
+    <ul id="messages"></ul>
+    <div id="input-container">
+      <input id="messageInput" autocomplete="off" placeholder="Type your message and press Enter" />
+      <button id="sendButton">Send</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function () {
+      const socket = io();
+
+      // Function to send a message
+      function sendMessage() {
+        const message = $('#messageInput').val();
+        if (message.trim() !== '') {
+          socket.emit('chat message', message);
+          $('#messageInput').val('');
+        }
+      }
+
+      $('#sendButton').click(sendMessage);
+
+      // Listen for keydown event on the input field
+      $('#messageInput').keydown(function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault(); // Prevent the default behavior (form submission)
+          sendMessage();
+        }
+      });
+
+      socket.on('chat message', function (message) {
+        $('#messages').append($('<li>').text(message));
+      });
+    });
+  </script>
+</body>
+</html>

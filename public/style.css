@@ -1,0 +1,96 @@
+/* Reset some default browser styles */
+body, ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Style the entire chat container */
+  #chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Style the chat messages container */
+  #messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    max-height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style individual chat messages */
+  #messages li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Style the chat input field */
+  #messageInput {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  /* Style the send button */
+  #sendButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  /* Style the send button on hover */
+  #sendButton:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style the chat input container */
+  #input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  /* Style the username display */
+  .username {
+    font-weight: bold;
+  }
+  
+  /* Style messages from different users */
+  .user-message {
+    background-color: #e6f7ff;
+  }
+  
+  .teacher-message {
+    background-color: #e6ffe6;
+  }
+  
+  /* Add a timestamp to messages */
+  .message-timestamp {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  /* Style the header (if you have one) */
+  .header {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
