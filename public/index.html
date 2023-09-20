@@ -1,49 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Chat App</title>
-  <link rel="stylesheet" type="text/css" href="style.css"> <!-- Include the CSS file -->
-</head>
-<body>
-  <div id="chat-container">
-    <div class="header">Chat with Students</div>
-    <ul id="messages"></ul>
-    <div id="input-container">
-      <input id="messageInput" autocomplete="off" placeholder="Type your message and press Enter" />
-      <button id="sendButton">Send</button>
-    </div>
-  </div>
+<!-- ... Your existing HTML ... -->
+<div id="input-container">
+  <input id="messageInput" autocomplete="off" placeholder="Type your message and press Enter" />
+  <button id="sendButton">Send</button>
+</div>
+<!-- ... Your existing HTML ... -->
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(function () {
-      const socket = io();
+<script>
+  $(function () {
+    const $messageInput = $('#messageInput');
+    const $messages = $('#messages');
 
-      // Function to send a message
-      function sendMessage() {
-        const message = $('#messageInput').val();
-        if (message.trim() !== '') {
-          socket.emit('chat message', message);
-          $('#messageInput').val('');
-        }
+    function sendMessage() {
+      const message = $messageInput.val();
+      if (message.trim() !== '') {
+        $.post('/send-message', { message }, (response) => {
+          if (response.success) {
+            $messageInput.val('');
+          } else {
+            alert('Message cannot be empty.');
+          }
+        });
       }
+    }
 
-      $('#sendButton').click(sendMessage);
+    $('#sendButton').click(sendMessage);
 
-      // Listen for keydown event on the input field
-      $('#messageInput').keydown(function (event) {
-        if (event.key === "Enter") {
-          event.preventDefault(); // Prevent the default behavior (form submission)
-          sendMessage();
-        }
+    function displayMessages() {
+      $.get('/get-messages', (data) => {
+        $messages.empty();
+        data.forEach((message) => {
+          $messages.append($('<li>').text(message));
+        });
       });
+    }
 
-      socket.on('chat message', function (message) {
-        $('#messages').append($('<li>').text(message));
-      });
-    });
-  </script>
-</body>
-</html>
+    // Load existing messages when the page loads
+    displayMessages();
+
+    // Poll for new messages every few seconds
+    setInterval(displayMessages, 5000); // Adjust the interval as needed
+  });
+</script>
