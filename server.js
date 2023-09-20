@@ -1,35 +1,32 @@
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
 
-// Serve static files (e.g., HTML, CSS, JavaScript)
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Set up a basic route
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Handle socket.io connections
-io.on('connection', (socket) => {
-  console.log('A user connected');
+const messages = [];
 
-  // Handle chat messages
-  socket.on('chat message', (message) => {
-    io.emit('chat message', message); // Broadcast the message to all connected clients
-  });
-
-  // Handle disconnections
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
+app.post('/send-message', express.json(), (req, res) => {
+  const { message } = req.body;
+  if (message && message.trim() !== '') {
+    messages.push(message);
+    res.status(200).json({ success: true });
+  } else {
+    res.status(400).json({ success: false });
+  }
 });
 
-// Start the server
+app.get('/get-messages', (req, res) => {
+  res.json(messages);
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
